@@ -1,7 +1,83 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "prototypes.h"
+
+void print_matrix_float(int dim, float* matrix){
+
+    int i,j;
+    for(i=0; i<dim; i++){
+        for(j=0; j<dim; j++){
+            printf("%f |",matrix[i*dim+j]);
+        }
+        printf("\n");
+    }
+}
+
+void print_matrix_double(int dim, double* matrix){
+
+    int i,j;
+    for(i=0; i<dim; i++){
+        for(j=0; j<dim; j++){
+            printf("%f |",matrix[i*dim+j]);
+        }
+        printf("\n");
+    }
+}
+
+void print_float_result(int dim, FloatResult res_struct, int show_matrix, int show_time, int show_trial_id, int show_alg){
+    
+    printf(" Data type: float ");
+    if(show_matrix)
+        print_matrix_float(dim, res_struct.matrix);
+    if(show_alg)
+        printf(" Algorithm: %s", res_struct.alg);
+    if(show_time)
+        printf(" Time spent : %f ", res_struct.time_spent);
+    if(show_trial_id)
+        printf(" Trial id : %d ", res_struct.trial_id);
+    
+
+}
+
+void print_double_result(int dim, DoubleResult res_struct, int show_matrix, int show_time, int show_trial_id, int show_alg){
+    
+    printf(" Data type: double ");
+    if(show_matrix)
+        print_matrix_double(dim, res_struct.matrix);
+    if(show_alg)
+        printf(" Algorithm: %s ", res_struct.alg);
+    if(show_time)
+        printf( "Time spent : %f ", res_struct.time_spent);
+    if(show_trial_id)
+        printf(" Trial id : %d ", res_struct.trial_id);
+}
+
+int check_equal_matrix_double(int dim, double* matA, double* matB){
+    int isEqual = 1;
+    int i,j;
+    for(i=0; i<dim && isEqual; i++){
+        for(j=0; j<dim && isEqual; j++){
+            if(!(matA[i*dim+j] == matB[i*dim+j]))
+                isEqual = 0;
+        }
+    }
+    return isEqual;
+}
+
+
+int check_equal_matrix_float(int dim, float* matA, float* matB){
+    int isEqual = 1;
+    int i,j;
+    for(i=0; i<dim && isEqual; i++){
+        for(j=0; j<dim && isEqual; j++){
+            if(!(matA[i*dim+j] == matB[i*dim+j]))
+                isEqual = 0;
+        }
+    }
+    return isEqual;
+}
 
 double* generate_matrix_double(int dim, int low, int high, int verbose){
     
@@ -44,60 +120,14 @@ float* generate_matrix_float(int dim, int low, int high, int verbose){
         double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
         printf("Gen-- type: float -- dim: %d -- %f seconds\n", dim, time_spent);
     }
+    
     return matrix;
 }
 
 
-void print_matrix_float(int dim, float* matrix){
+DoubleResult ijk_double(int dim, double* matA, double* matB, int verbose){
 
-    int i,j;
-    for(i=0; i<dim; i++){
-        for(j=0; j<dim; j++){
-            printf("%f |",matrix[i*dim+j]);
-        }
-        printf("\n");
-    }
-}
-
-
-void print_matrix_double(int dim, double* matrix){
-
-    int i,j;
-    for(i=0; i<dim; i++){
-        for(j=0; j<dim; j++){
-            printf("%f |",matrix[i*dim+j]);
-        }
-        printf("\n");
-    }
-
-}
-int check_equal_matrix_double(int dim, double* matA, double* matB){
-    int isEqual = 1;
-    int i,j;
-    for(i=0; i<dim && isEqual; i++){
-        for(j=0; j<dim && isEqual; j++){
-            if(!(matA[i*dim+j] == matB[i*dim+j]))
-                isEqual = 0;
-        }
-    }
-    return isEqual;
-}
-
-
-int check_equal_matrix_float(int dim, float* matA, float* matB){
-    int isEqual = 1;
-    int i,j;
-    for(i=0; i<dim && isEqual; i++){
-        for(j=0; j<dim && isEqual; j++){
-            if(!(matA[i*dim+j] == matB[i*dim+j]))
-                isEqual = 0;
-        }
-    }
-    return isEqual;
-
-}
-
-double* ijk_double(int dim, double* matA, double* matB, int verbose){
+    DoubleResult res_struct;
     double* result = (double*) malloc(sizeof(double) * dim * dim);
     int i,j,k;
     clock_t begin, end;
@@ -113,15 +143,19 @@ double* ijk_double(int dim, double* matA, double* matB, int verbose){
             result[i*dim + j] = sum;
         }
     }
-    if (verbose){
-        end = clock();
-        double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
         printf("IJK -- dim: %d -- type: double -- %f seconds\n", dim, time_spent);
-    }
-    return result;
+
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "IJK");
+    return res_struct;
 }
 
-float* ijk_float(int dim, float* matA, float* matB, int verbose){
+FloatResult ijk_float(int dim, float* matA, float* matB, int verbose){
+    FloatResult res_struct;
     float* result = (float*) malloc(sizeof(float) * dim * dim);
     int i,j,k;
     clock_t begin, end;
@@ -137,15 +171,18 @@ float* ijk_float(int dim, float* matA, float* matB, int verbose){
             result[i*dim + j] = sum;
         }
     }
-    if (verbose){
-        end = clock();
-        float time_spent = (float) (end - begin) / CLOCKS_PER_SEC;
+    end = clock();
+    float time_spent = (float) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
         printf("IJK -- dim: %d -- type: float -- %f seconds\n", dim, time_spent);
-    }
-    return result;
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "IJK");
+    return res_struct;
 }
 
-double* jik_double(int dim, double* matA, double* matB, int verbose){
+DoubleResult jik_double(int dim, double* matA, double* matB, int verbose){
+    DoubleResult res_struct;
     double* result = (double*) malloc(sizeof(double) * dim * dim);
     int i,j,k;
     clock_t begin, end;
@@ -161,15 +198,19 @@ double* jik_double(int dim, double* matA, double* matB, int verbose){
             result[i*dim + j] = sum;
         }
     }
-    if (verbose){
-        end = clock();
-        double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
         printf("JIK -- dim: %d -- type: double -- %f seconds\n", dim, time_spent);
-    }
-    return result;
+
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "JIK");
+    return res_struct;
 }
 
-float* jik_float(int dim, float* matA, float* matB, int verbose){
+FloatResult jik_float(int dim, float* matA, float* matB, int verbose){
+    FloatResult res_struct;
     float* result = (float*) malloc(sizeof(float) * dim * dim);
     int i,j,k;
     clock_t begin, end;
@@ -185,31 +226,327 @@ float* jik_float(int dim, float* matA, float* matB, int verbose){
             result[i*dim + j] = sum;
         }
     }
-    if (verbose){
-        end = clock();
-        double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
         printf("JIK -- dim: %d -- type: float -- %f seconds\n", dim, time_spent);
+
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "JIK");
+
+    return res_struct;
+}
+
+DoubleResult kij_double(int dim, double* matA, double* matB, int verbose){
+    DoubleResult res_struct;
+    double* result = (double*) malloc(sizeof(double) * dim * dim);
+    int i,j,k;
+    clock_t begin, end;
+    double r;
+
+    if(verbose)
+        begin = clock();
+
+    for (k=0; k<dim; k++){
+        for(i=0; i<dim; i++){
+            r = matA[i*dim + k];
+            
+            for(j=0; j<dim; j++ ){
+                result[i*dim + j] += r * matB[k*dim + j];
+            }
+        }
     }
-    return result;
+
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
+        printf("KIJ -- dim: %d -- type: double -- %f seconds\n", dim, time_spent);
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "KIJ");
+
+    return res_struct;
 }
 
-void test_double_matrices(int dim, double* matA, double* matB){
+FloatResult kij_float(int dim, float* matA, float* matB, int verbose){
     
-    double* matCijk = (double*) malloc(dim*dim*sizeof(double));
-    double* matCjik = (double*) malloc(dim*dim*sizeof(double));
-    
-    matCijk = ijk_double(dim, matA, matB, 1);
-    matCjik = jik_double(dim, matA, matB, 1);
+    FloatResult res_struct;
+    float* result = (float*) malloc(sizeof(float) * dim * dim);
+    int i,j,k;
+    clock_t begin, end;
+
+    float r;
+
+    if(verbose)
+        begin = clock();
+
+    for (k=0; k<dim; k++){
+        for(i=0; i<dim; i++){
+            r = matA[i*dim + k];
+            
+            for(j=0; j<dim; j++ ){
+                result[i*dim + j] += r * matB[k*dim + j];
+            }
+        }
+    }
+
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+
+    if (verbose)
+        printf("KIJ -- dim: %d -- type: float -- %f seconds\n", dim, time_spent);
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "KIJ");
 
 
+    return res_struct;
 }
-void test_float_matrices(int dim, float* matA, float* matB){
+
+DoubleResult ikj_double(int dim, double* matA, double* matB, int verbose){
+    DoubleResult res_struct;
+    double* result = (double*) malloc(sizeof(double) * dim * dim);
+    int i,j,k;
+    clock_t begin, end;
+    double r;
+
+    if(verbose)
+        begin = clock();
+    for (i=0; i<dim;i++){
+        for(k=0; k<dim; k++){
+            r = matA[i*dim + k];
+            for(j=0; j<dim; j++ ){
+                result[i*dim + j] += r * matB[k*dim + j];
+            }
+        }
+    }
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)    
+        printf("IKJ -- dim: %d -- type: double -- %f seconds\n", dim, time_spent);
     
-    float* matCijk = (float*) malloc(dim*dim*sizeof(float));
-    float* matCjik = (float*) malloc(dim*dim*sizeof(float));
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "IKJ");
+
+    return res_struct;
+}
+
+FloatResult ikj_float(int dim, float* matA, float* matB, int verbose){
+    FloatResult res_struct;
+    float* result = (float*) malloc(sizeof(float) * dim * dim);
+    int i,j,k;
+    clock_t begin, end;
+
+    float r;
+
+    if(verbose)
+        begin = clock();
+
+    for (i=0; i<dim;i++){
+        for(k=0; k<dim; k++){
+            r = matA[i*dim + k];
+            for(j=0; j<dim; j++ ){
+                result[i*dim + j] += r * matB[k*dim + j];
+            }
+        }
+    }
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
     
-    matCijk = ijk_float(dim, matA, matB, 1);
-    matCjik = jik_float(dim, matA, matB, 1);
+    if (verbose)
+        printf("IKJ -- dim: %d -- type: float -- %f seconds\n", dim, time_spent);
+
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "KIJ");
+
+    
+    return res_struct;
+}
+
+DoubleResult jki_double(int dim, double* matA, double* matB, int verbose){
+    DoubleResult res_struct;
+    double* result = (double*) malloc(sizeof(double) * dim * dim);
+    int i,j,k;
+    clock_t begin, end;
+    double r;
+
+    if(verbose)
+        begin = clock();
+    for (j=0; j<dim;j++){
+        
+        for(k=0; k<dim; k++){
+            r = matB[k*dim + j];
+            for(i=0; i<dim; i++){
+                result[i*dim + j] += r * matA[i*dim + k];
+            }
+        }
+    }
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
+        printf("JKI -- dim: %d -- type: double -- %f seconds\n", dim, time_spent);
+    
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "JKI");
+
+    return res_struct;
+}
+
+FloatResult jki_float(int dim, float* matA, float* matB, int verbose){
+    FloatResult res_struct;
+    float* result = (float*) malloc(sizeof(float) * dim * dim);
+    int i,j,k;
+    clock_t begin, end;
+
+    float r;
+
+    
+    begin = clock();
+
+    for (j=0; j<dim;j++){
+        for(k=0; k<dim; k++){
+            r = matB[k*dim + j];
+            for(i=0; i<dim; i++ ){
+                result[i*dim + j] += r * matA[i*dim + k];
+            }
+        }
+    }
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
+        printf("JKI -- dim: %d -- type: float -- %f seconds\n", dim, time_spent);
+    
+        
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "JKI");
+
+    
+
+    return res_struct;
+}
+
+DoubleResult kji_double(int dim, double* matA, double* matB, int verbose){
+    
+    DoubleResult res_struct;
+
+    double* result = (double*) malloc(sizeof(double) * dim * dim);
+    int i,j,k;
+    clock_t begin, end;
+    double r;
+
+    if(verbose)
+        begin = clock();
+    for (k=0; k<dim;k++){
+        
+        for(j=0; j<dim; j++){
+            r = matB[k*dim + j];
+            for(i=0; i<dim; i++){
+                result[i*dim + j] += r * matA[i*dim + k];
+            }
+        }
+    }
+
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
+        printf("KJI -- dim: %d -- type: double -- %f seconds\n", dim, time_spent);
+    
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "KJI");
+
+    
+
+    return res_struct;
+}
+
+FloatResult kji_float(int dim, float* matA, float* matB, int verbose){
+    FloatResult res_struct;
+    float* result = (float*) malloc(sizeof(float) * dim * dim);
+    int i,j,k;
+    clock_t begin, end;
+
+    float r;
+
+    
+    begin = clock();
+
+    for (k=0; k<dim;k++){
+        for(j=0; j<dim; j++){
+            r = matB[k*dim + j];
+            for(i=0; i<dim; i++ ){
+                result[i*dim + j] += r * matA[i*dim + k];
+            }
+        }
+    }
+
+    end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose)
+        printf("KJI -- dim: %d -- type: float -- %f seconds\n", dim, time_spent);
+    
+    res_struct.matrix = result;
+    res_struct.time_spent = time_spent;
+    strcpy(res_struct.alg, "KJI");
+
+    
+
+    return res_struct;
+}
+
+DoubleResult *test_double_matrices(int dim, double* matA, double* matB,int trial_id,  DoubleResult *res_arr, int mult_algs){
+    
+    int alg_id;
+
+    DoubleResult matCijk = ijk_double(dim, matA, matB, 0);
+    DoubleResult matCjik = jik_double(dim, matA, matB, 0);
+    DoubleResult matCkij = kij_double(dim, matA, matB, 0);
+    DoubleResult matCikj = ikj_double(dim, matA, matB, 0);
+    DoubleResult matCjki = jki_double(dim, matA, matB, 0);
+    DoubleResult matCkji = kji_double(dim, matA, matB, 0);
+
+    *(res_arr) = matCijk;
+    *(res_arr+1) = matCjik;
+    *(res_arr+2) = matCkij;
+    *(res_arr+3) = matCikj;
+    *(res_arr+4) = matCjki;
+    *(res_arr+5) = matCkji;
+
+    for(alg_id=0; alg_id < mult_algs; alg_id++)
+        (res_arr+alg_id)->trial_id;
+
+
+    return res_arr;
+}
+FloatResult *test_float_matrices(int dim, float* matA, float* matB, int trial_id , FloatResult *res_arr, int mult_algs){
+    
+    int alg_id;
+
+    FloatResult matCijk = ijk_float(dim, matA, matB, 0);
+    FloatResult matCjik = jik_float(dim, matA, matB, 0);
+    FloatResult matCkij = kij_float(dim, matA, matB, 0);
+    FloatResult matCikj = ikj_float(dim, matA, matB, 0);
+    FloatResult matCjki = jki_float(dim, matA, matB, 0);
+    FloatResult matCkji = kji_float(dim, matA, matB, 0);
+
+    
+    *(res_arr) = matCijk;
+    *(res_arr+1) = matCjik;
+    *(res_arr+2) = matCkij;
+    *(res_arr+3) = matCikj;
+    *(res_arr+4) = matCjki;
+    *(res_arr+5) = matCkji;
+
+    for(alg_id=0; alg_id < mult_algs; alg_id++)
+        (res_arr+alg_id)->trial_id;
+
+
+    return res_arr;
 }
 
 
