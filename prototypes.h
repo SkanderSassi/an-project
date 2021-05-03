@@ -58,4 +58,6 @@ FloatResult kji_float(int dim, float* matA, float* matB, int verbose);
 DoubleResult *test_double_matrices(int dim, double* matA, double* matB, int trial_id, DoubleResult *res_arr, int mult_algs);
 FloatResult *test_float_matrices(int dim, float* matA, float* matB, int trial_id, FloatResult *res_arr, int mult_algs);
 
+int write_double_to_csv(int dim, DoubleResult res, FILE* file);
+int write_float_to_csv(int dim, FloatResult res, FILE* file);
 #endif

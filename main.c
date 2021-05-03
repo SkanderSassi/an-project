@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
     FloatResult *fl_res_arr = malloc(MULT_ALGS*sizeof(FloatResult));
     DoubleResult *dbl_res_arr = malloc(MULT_ALGS*sizeof(DoubleResult));
 
-    int dim, mult_id, index, trial_id;
+    int dim, mult_id, index, trial_id, printed_vals;
     double *matAd, *matBd, *matCd;
     float *matAf, *matBf, *matCf;
     FILE *csv_file;
@@ -51,10 +51,12 @@ int main(int argc, char* argv[]){
 
             for(mult_id=0; mult_id<MULT_ALGS; mult_id++){
                 print_double_result(dim, *(dbl_res_arr + mult_id), 0, 1, 1, 1); 
+                printed_vals = write_double_to_csv(dim, *(dbl_res_arr + mult_id), csv_file);
                 printf("\n");
             }
             for(mult_id=0; mult_id<MULT_ALGS; mult_id++){
                 print_float_result(dim, *(fl_res_arr + mult_id), 0, 1, 1, 1);
+                printed_vals = write_float_to_csv(dim, *(fl_res_arr + mult_id), csv_file);
                 printf("\n");
             }
 
