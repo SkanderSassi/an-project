@@ -132,8 +132,8 @@ DoubleResult ijk_double(int dim, double* matA, double* matB, int verbose){
     int i,j,k;
     clock_t begin, end;
     double sum;
-    if(verbose)
-        begin = clock();
+    
+    begin = clock();
     for(i=0; i<dim; i++){
         for(j=0; j<dim; j++){
             sum =0;
@@ -160,8 +160,8 @@ FloatResult ijk_float(int dim, float* matA, float* matB, int verbose){
     int i,j,k;
     clock_t begin, end;
     float sum;
-    if(verbose)
-        begin = clock();
+    
+    begin = clock();
     for(i=0; i<dim; i++){
         for(j=0; j<dim; j++){
             sum =0;
@@ -187,8 +187,8 @@ DoubleResult jik_double(int dim, double* matA, double* matB, int verbose){
     int i,j,k;
     clock_t begin, end;
     double sum;
-    if(verbose)
-        begin = clock();
+    
+    begin = clock();
     for(j=0; j<dim; j++){
         for(i=0; i<dim; i++){
             sum =0;
@@ -215,8 +215,8 @@ FloatResult jik_float(int dim, float* matA, float* matB, int verbose){
     int i,j,k;
     clock_t begin, end;
     float sum;
-    if(verbose)
-        begin = clock();
+    
+    begin = clock();
     for(j=0; j<dim; j++){
         for(i=0; i<dim; i++){
             sum =0;
@@ -245,8 +245,8 @@ DoubleResult kij_double(int dim, double* matA, double* matB, int verbose){
     clock_t begin, end;
     double r;
 
-    if(verbose)
-        begin = clock();
+    
+    begin = clock();
 
     for (k=0; k<dim; k++){
         for(i=0; i<dim; i++){
@@ -278,8 +278,7 @@ FloatResult kij_float(int dim, float* matA, float* matB, int verbose){
 
     float r;
 
-    if(verbose)
-        begin = clock();
+    begin = clock();
 
     for (k=0; k<dim; k++){
         for(i=0; i<dim; i++){
@@ -311,8 +310,8 @@ DoubleResult ikj_double(int dim, double* matA, double* matB, int verbose){
     clock_t begin, end;
     double r;
 
-    if(verbose)
-        begin = clock();
+    
+    begin = clock();
     for (i=0; i<dim;i++){
         for(k=0; k<dim; k++){
             r = matA[i*dim + k];
@@ -341,8 +340,7 @@ FloatResult ikj_float(int dim, float* matA, float* matB, int verbose){
 
     float r;
 
-    if(verbose)
-        begin = clock();
+    begin = clock();
 
     for (i=0; i<dim;i++){
         for(k=0; k<dim; k++){
@@ -373,8 +371,8 @@ DoubleResult jki_double(int dim, double* matA, double* matB, int verbose){
     clock_t begin, end;
     double r;
 
-    if(verbose)
-        begin = clock();
+    
+    begin = clock();
     for (j=0; j<dim;j++){
         
         for(k=0; k<dim; k++){
@@ -439,8 +437,8 @@ DoubleResult kji_double(int dim, double* matA, double* matB, int verbose){
     clock_t begin, end;
     double r;
 
-    if(verbose)
-        begin = clock();
+    
+    begin = clock();
     for (k=0; k<dim;k++){
         
         for(j=0; j<dim; j++){
@@ -501,7 +499,7 @@ FloatResult kji_float(int dim, float* matA, float* matB, int verbose){
 
 DoubleResult *test_double_matrices(int dim, double* matA, double* matB,int trial_id,  DoubleResult *res_arr, int mult_algs){
     
-    int alg_id;
+    int alg_id = 0;
 
     DoubleResult matCijk = ijk_double(dim, matA, matB, 0);
     DoubleResult matCjik = jik_double(dim, matA, matB, 0);
@@ -510,6 +508,13 @@ DoubleResult *test_double_matrices(int dim, double* matA, double* matB,int trial
     DoubleResult matCjki = jki_double(dim, matA, matB, 0);
     DoubleResult matCkji = kji_double(dim, matA, matB, 0);
 
+    matCijk.trial_id = trial_id;
+    matCjik.trial_id = trial_id;
+    matCkij.trial_id = trial_id;
+    matCikj.trial_id = trial_id;
+    matCjki.trial_id = trial_id;
+    matCkji.trial_id = trial_id;
+
     *(res_arr) = matCijk;
     *(res_arr+1) = matCjik;
     *(res_arr+2) = matCkij;
@@ -517,8 +522,7 @@ DoubleResult *test_double_matrices(int dim, double* matA, double* matB,int trial
     *(res_arr+4) = matCjki;
     *(res_arr+5) = matCkji;
 
-    for(alg_id=0; alg_id < mult_algs; alg_id++)
-        (res_arr+alg_id)->trial_id;
+    
 
 
     return res_arr;
@@ -535,6 +539,13 @@ FloatResult *test_float_matrices(int dim, float* matA, float* matB, int trial_id
     FloatResult matCkji = kji_float(dim, matA, matB, 0);
 
     
+    matCijk.trial_id = trial_id;
+    matCjik.trial_id = trial_id;
+    matCkij.trial_id = trial_id;
+    matCikj.trial_id = trial_id;
+    matCjki.trial_id = trial_id;
+    matCkji.trial_id = trial_id;
+    
     *(res_arr) = matCijk;
     *(res_arr+1) = matCjik;
     *(res_arr+2) = matCkij;
@@ -542,8 +553,7 @@ FloatResult *test_float_matrices(int dim, float* matA, float* matB, int trial_id
     *(res_arr+4) = matCjki;
     *(res_arr+5) = matCkji;
 
-    for(alg_id=0; alg_id < mult_algs; alg_id++)
-        (res_arr+alg_id)->trial_id;
+    
 
 
     return res_arr;

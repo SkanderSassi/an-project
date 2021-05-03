@@ -14,16 +14,26 @@ int main(int argc, char* argv[]){
         printf("Please input matrix dimension\n");
         return EXIT_FAILURE;
     }
-
     FloatResult *fl_res_arr = malloc(MULT_ALGS*sizeof(FloatResult));
     DoubleResult *dbl_res_arr = malloc(MULT_ALGS*sizeof(DoubleResult));
 
-    int dim, mult_id;
+    int dim, mult_id, index, trial_id;
     double *matAd, *matBd, *matCd;
     float *matAf, *matBf, *matCf;
+    FILE *csv_file;
+
+    csv_file = fopen("data.csv", "a+");
+
+    if (csv_file == NULL){
+        puts("Unable to open file");
+        return EXIT_FAILURE;
+    }
+    //Set up columns
+
+    fprintf(csv_file, "dimension, data_type, algorithm, time_spent, trial_id\n");
+
     srand(1);
-    int index;
-    int trial_id;
+    
     for(index=1; index<argc; index++){ // For every dimensions to test on 
         
         dim = strtol(argv[index], NULL, 10);
@@ -40,8 +50,10 @@ int main(int argc, char* argv[]){
             fl_res_arr = test_float_matrices(dim, matAf, matBf, trial_id, fl_res_arr, MULT_ALGS);
 
             for(mult_id=0; mult_id<MULT_ALGS; mult_id++){
-                print_double_result(dim, *(dbl_res_arr + mult_id), 0, 1, 1, 1);
+                print_double_result(dim, *(dbl_res_arr + mult_id), 0, 1, 1, 1); 
                 printf("\n");
+            }
+            for(mult_id=0; mult_id<MULT_ALGS; mult_id++){
                 print_float_result(dim, *(fl_res_arr + mult_id), 0, 1, 1, 1);
                 printf("\n");
             }
@@ -50,7 +62,7 @@ int main(int argc, char* argv[]){
         }
     }
 
-    
+    fclose(csv_file);
     
     
     
