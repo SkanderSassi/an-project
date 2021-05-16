@@ -1,27 +1,13 @@
 #ifndef PROTOTYPES_H
 #define PROTOTYPES_H
-
-
-struct FloatResult{
-    float *matrix;
-    int trial_id;
-    double time_spent;
-    char alg[3];
-};
-
-struct DoubleResult{
-    double *matrix;
-    int trial_id;
-    double time_spent;
-    char alg[3];
-};
-
-typedef struct FloatResult FloatResult;
-typedef struct DoubleResult DoubleResult;
-
+#include <stdio.h>
+#include "datatypes.h"
 
 // Generators
-double* generate_matrix_double(int dim, int low, int high, int verbose);
+double generate_double(int low, int high);
+float generate_float(int low, int high);
+
+    double *generate_matrix_double(int dim, int low, int high, int verbose);
 float* generate_matrix_float(int dim, int low, int high, int verbose);
 // Printers
 void print_matrix_float(int dim, float* matrix);
@@ -33,6 +19,16 @@ void print_double_result(int dim, DoubleResult res_struct, int show_matrix, int 
 // Sanity check
 int check_equal_matrix_double(int dim, double* matA, double* matB);
 int check_equal_matrix_float(int dim, float* matA, float* matB);
+
+//Addition
+
+DoubleResult ij_add_double(int dim, double* matA, double* matB, int verbose);
+FloatResult ij_add_float(int dim, float* matA, float* matB, int verbose);
+
+DoubleResult ji_add_double(int dim, double* matA, double* matB, int verbose);
+FloatResult ji_add_float(int dim, float* matA, float* matB, int verbose);
+
+
 
 // Multiplication
 DoubleResult ijk_double(int dim, double* matA, double* matB, int verbose);
@@ -55,9 +51,10 @@ FloatResult kji_float(int dim, float* matA, float* matB, int verbose);
 
 //Tests
 
-DoubleResult *test_double_matrices(int dim, double* matA, double* matB, int trial_id, DoubleResult *res_arr, int mult_algs);
-FloatResult *test_float_matrices(int dim, float* matA, float* matB, int trial_id, FloatResult *res_arr, int mult_algs);
+
 
 int write_double_to_csv(int dim, DoubleResult res, FILE* file);
 int write_float_to_csv(int dim, FloatResult res, FILE* file);
+
+
 #endif
