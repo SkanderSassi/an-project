@@ -1,22 +1,22 @@
-data_type, operation, time_spent, trial_id
-double, ADD, 0.000004, 0
-double, MULT, 0.000002, 0
-float, ADD, 0.000002, 0
-float, MULT, 0.000002, 0
-double, ADD, 0.000002, 1
-double, MULT, 0.000001, 1
-float, ADD, 0.000000, 1
-float, MULT, 0.000001, 1
-double, ADD, 0.000001, 2
-double, MULT, 0.000000, 2
-float, ADD, 0.000001, 2
-float, MULT, 0.000000, 2
-double, ADD, 0.000001, 3
-double, MULT, 0.000000, 3
-float, ADD, 0.000001, 3
-float, MULT, 0.000000, 3
-double, ADD, 0.000000, 4
-double, MULT, 0.000000, 4
-float, ADD, 0.000000, 4
-float, MULT, 0.000001, 4
+data_type,operation,time_spent,trial_id
+double,ADD,0.000004,0
+double,MULT,0.000002,0
+float,ADD,0.000002,0
+float,MULT,0.000002,0
+double,ADD,0.000002,1
+double,MULT,0.000001,1
+float,ADD,0.000000,1
+float,MULT,0.000001,1
+double,ADD,0.000001,2
+double,MULT,0.000000,2
+float,ADD,0.000001,2
+float,MULT,0.000000,2
+double,ADD,0.000001,3
+double,MULT,0.000000,3
+float,ADD,0.000001,3
+float,MULT,0.000000,3
+double,ADD,0.000000,4
+double,MULT,0.000001,4
+float,ADD,0.000000,4
+float,MULT,0.000001,4
 
