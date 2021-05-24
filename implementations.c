@@ -95,7 +95,7 @@ int write_double_to_csv(int dim, DoubleResult res, FILE *file)
     //dimension, data_type, algorithm, time_spent, trial_id
     int return_val;
 
-    return_val = fprintf(file, "%d, %s, %s, %f, %d\n", dim, "double", res.alg, res.time_spent, res.trial_id);
+    return_val = fprintf(file, "%d,%s,%s,%f,%d\n", dim, "double", res.alg, res.time_spent, res.trial_id);
 
     return return_val;
 }
@@ -104,7 +104,7 @@ int write_float_to_csv(int dim, FloatResult res, FILE *file)
     //dimension, data_type, algorithm, time_spent, trial_id
     int return_val;
 
-    return_val = fprintf(file, "%d, %s, %s, %f, %d\n", dim, "float", res.alg, res.time_spent, res.trial_id);
+    return_val = fprintf(file, "%d,%s,%s,%f,%d\n", dim, "float", res.alg, res.time_spent, res.trial_id);
 
     return return_val;
 }
@@ -538,7 +538,7 @@ FloatResult ikj_float(int dim, float *matA, float *matB, int verbose)
 
     res_struct.matrix = result;
     res_struct.time_spent = time_spent;
-    strcpy(res_struct.alg, "KIJ");
+    strcpy(res_struct.alg, "IKJ");
 
     return res_struct;
 }

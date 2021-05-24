@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
     csv_file = fopen("data.csv", "w+");
     // Single numbers
 
-    csv_file2 = fopen("single_num.csv", "w+");
+    // csv_file2 = fopen("single_num.csv", "w+");
 
     if (csv_file == NULL){
         puts("Unable to open file");
@@ -36,8 +36,8 @@ int main(int argc, char* argv[]){
     }
     //Set up columns
 
-    fprintf(csv_file, "dimension, data_type, algorithm, time_spent, trial_id\n");
-    fprintf(csv_file2, "data_type, operation, time_spent, trial_id\n");
+    fprintf(csv_file, "dimension,data_type,algorithm,time_spent,trial_id\n");
+    // fprintf(csv_file2, "data_type, operation, time_spent, trial_id\n");
     // Random Seed
     srand(1);
     
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]){
         printf("----------------------------- Dimension : %d ----------------------------\n", dim);
         for(trial_id=0; trial_id<TRIES; trial_id++){
 
-            test_single_number(csv_file2, LOW, HIGH, trial_id);
+            // test_single_number(csv_file2, LOW, HIGH, trial_id);
             dbl_res_arr = test_double_matrices(dim, matAd, matBd, trial_id, dbl_res_arr, ALGS);
             fl_res_arr = test_float_matrices(dim, matAf, matBf, trial_id, fl_res_arr, ALGS);
 
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]){
     }
 
     fclose(csv_file);
-    fclose(csv_file2);
+    // fclose(csv_file2);
     
     
     
